@@ -19,7 +19,18 @@ from telegram.error import Forbidden
 # --- Configuration ---
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 ADMIN_IDS = [5718213826]
-DB_NAME = "engagement_bot_final.db"
+# --- Database Path Configuration ---
+# Render Disks are mounted at /var/data by default
+RENDER_DISK_PATH = "/var/data/engagement_bot_final.db"
+LOCAL_PATH = "engagement_bot_final.db"
+
+# Check if the Render disk path exists
+if os.path.exists("/var/data"):
+    DB_NAME = RENDER_DISK_PATH
+    logger.info("Running on Render. Using persistent disk for database.")
+else:
+    DB_NAME = LOCAL_PATH
+    logger.info("Running locally. Using local file for database.")
 MAX_VIDEOS_PER_USER = 5
 STRIKE_LIMIT = 4
 VERIFICATION_EXPIRY_HOURS = 4
